@@ -10,7 +10,7 @@ ENV/
 !.env.example
 
 # Python cache and compiled files
-_pycache_/
+__pycache__/
 *.py[cod]
 *.pyo
 
@@ -39,7 +39,7 @@ logs/
 *.swp
 *.swo
 .DS_Store
-Thumbs.db'n# Local Git backups 'n.git-old-backup/'nlocal-changes-backup.patch'nlocal-code-changes.patch
+Thumbs.db
 
 # Local Git backups
 .git-old-backup/
