@@ -1,15 +1,19 @@
 import requests
+from setting import config
 
 def log_error(file_name,function_name,error_message):
+    print(function_name,error_message)
+    if not config.error_log_url:
+        return
     try:
-        print(function_name,error_message)
         requests.post(
-            "http://localhost:8001/api/v1/error",
+            config.error_log_url,
             json = {
                 "file_name": file_name,
                 "function_name": function_name,
                 "error_message": error_message
-            }
+            },
+            timeout=3
         )
-    except:
+    except Exception:
         pass

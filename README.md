@@ -123,6 +123,9 @@ MODEL_ID=<bedrock-model-id>
 
 # Optional: tools the reviewer must not use (comma-separated)
 BLOCKED_TOOLS=read_file,write_file,create_file,delete_file,analyze_python_file
+
+# Optional: error logging backend (leave empty to disable)
+ERROR_LOG_URL=
 ```
 
 | Variable | Required | Notes |
@@ -132,8 +135,29 @@ BLOCKED_TOOLS=read_file,write_file,create_file,delete_file,analyze_python_file
 | `REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Yes | Used to create the Bedrock client |
 | `MODEL_ID` | Yes | Bedrock model ID |
 | `BLOCKED_TOOLS` | No | Defaults to the list shown above |
+| `ERROR_LOG_URL` | No | URL of your own error logging backend. See below |
 
 The LLM client (`src/utils/llm_client.py`) is set up with `provider="amazon"` and Titan-style parameters (`maxTokenCount`). If you use a model from another provider (for example Claude), change the `provider` and the model parameters there to match.
+
+### Error logging (optional)
+
+When something fails, the app always prints the error to the console. If you also want errors stored, run your own error logging backend and put its URL in `.env`:
+
+```env
+ERROR_LOG_URL=http://localhost:8001/api/v1/error
+```
+
+The app then sends a `POST` request to that URL with this JSON body:
+
+```json
+{
+  "file_name": "agent_service.py",
+  "function_name": "code_generator",
+  "error_message": "..."
+}
+```
+
+This backend is not part of this repository. If `ERROR_LOG_URL` is empty or not set, errors are only printed to the console and nothing is sent. If the backend is down, the app keeps working.
 
 ## Setup and run
 

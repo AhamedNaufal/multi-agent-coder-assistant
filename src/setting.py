@@ -5,6 +5,12 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
+def require_env(name:str)->str:
+    value =os.getenv(name)
+    if not value:
+        raise RuntimeError(f"Missinng reuqired environment variable: {name}")
+    return value
+
 @dataclass
 class Config:
     db_port: str
@@ -16,6 +22,7 @@ class Config:
     host: str
     log_level: str
     blocked_tools: list
+    error_log_url: str 
     
 
 def get_config():
@@ -24,7 +31,7 @@ def get_config():
         db_host=os.getenv('DB_HOST', 'localhost'),
         db_name=os.getenv('DB_NAME', 'multi_agent_db1'),
         db_username=os.getenv('DB_USERNAME', 'postgres'),
-        db_password=os.getenv('DB_PASSWORD'),
+        db_password=require_env('DB_PASSWORD'),
         port=int(os.getenv('PORT', '8080')),
         host=os.getenv('HOST', '0.0.0.0'),
         log_level=os.getenv('LOG_LEVEL', 'INFO'),
@@ -34,7 +41,9 @@ def get_config():
                 'BLOCKED_TOOLS',
                 'read_file,write_file,create_file,delete_file,analyze_python_file'
             ).split(',')
-        ]
+        ],
+        error_log_url=os.getenv('ERROR_LOG_URL','')
     )
+    
 
 config = get_config()
