@@ -1,7 +1,7 @@
 [project]
 name = "mcp-client"
 version = "0.1.0"
-description = "Add your description here"
+description = "Multi-agent coding assistant using LangGraph, FastAPI, AWS Bedrock, and MCP tools for code generation, research, and code review."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
